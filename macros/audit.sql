@@ -11,7 +11,7 @@
 
 {% macro get_audit_schema() %}
     {% set audit_table = get_audit_relation() %}
-    {{ return(audit_table.quoted(audit_table.schema)) }}    
+    {{ return(audit_table.include(schema=True, identifier=False)) }}
 {% endmacro %}
 
 
