@@ -1,0 +1,32 @@
+name: 'logging'
+version: '1.0'
+
+profile: 'redshift-testing'
+
+source-paths: ["models"]
+analysis-paths: ["analysis"] 
+test-paths: ["tests"]
+data-paths: ["data"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+
+
+on-run-start:
+  - "create schema if not exists {{target.schema}}_META"
+  - "{{ create_audit_log_table() }}"
+  - "{{ log_run_start_event() }}"
+  
+  
+on-run-end:
+  - "{{ log_run_end_event() }}"
+
+
+models:
+  pre-hook: "{{ log_model_start_event() }}"
+  post-hook: "{{ log_model_end_event() }}"
+  logging:
+    schema: meta

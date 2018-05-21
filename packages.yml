@@ -1,0 +1,3 @@
+packages:
+  - local: "/Users/tristan/dev/common/dbt-utils"
+    #revision: 0.1.8
