@@ -10,14 +10,14 @@
 
 
 {% macro get_audit_schema() %}
-    {% set audit_table = get_audit_relation() %}
-    {{ return(audit_table.include(schema=True, identifier=False)) }}
+    {% set audit_table = logging.get_audit_relation() %}
+    {{ return(audit_table.include(schema=True, identifier=False)) }}    
 {% endmacro %}
 
 
 {% macro log_audit_event(event_name) %}
 
-    insert into {{ get_audit_relation() }} (
+    insert into {{ logging.get_audit_relation() }} (
         event_name, 
         event_timestamp, 
         event_schema, 
@@ -27,7 +27,7 @@
     
     values (
         '{{ event_name }}', 
-        {{dbt_utils.current_timestamp()}}::{{dbt_utils.type_timestamp()}}, 
+        current_timestamp()::timestamp_ntz, 
         '{{ this.schema }}', 
         '{{ this.name }}',
         '{{ invocation_id }}'
@@ -37,16 +37,16 @@
 
 
 {% macro create_audit_schema() %}
-    create schema if not exists {{ get_audit_schema() }}
+    create schema if not exists {{ logging.get_audit_schema() }}
 {% endmacro %}
 
 
 {% macro create_audit_log_table() %}
 
-    create table if not exists {{ get_audit_relation() }}
+    create table if not exists {{ logging.get_audit_relation() }}
     (
        event_name       varchar(512),
-       event_timestamp  {{dbt_utils.type_timestamp()}},
+       event_timestamp  timestampntz,
        event_schema     varchar(512),
        event_model      varchar(512),
        invocation_id    varchar(512)
@@ -56,20 +56,20 @@
 
 
 {% macro log_run_start_event() %}
-    {{log_audit_event('run started')}}
+    {{logging.log_audit_event('run started')}}
 {% endmacro %}
 
 
 {% macro log_run_end_event() %}
-    {{log_audit_event('run completed')}}; commit;
+    {{logging.log_audit_event('run completed')}}; commit;
 {% endmacro %}
 
 
 {% macro log_model_start_event() %}
-    {{log_audit_event('model deployment started')}}
+    {{logging.log_audit_event('model deployment started')}}
 {% endmacro %}
 
 
 {% macro log_model_end_event() %}
-    {{log_audit_event('model deployment completed')}}
+    {{logging.log_audit_event('model deployment completed')}}
 {% endmacro %}
