@@ -8,6 +8,11 @@ aggregated as (
 
     select 
     
+        {{dbt_utils.surrogate_key(
+            'event_model', 
+            'invocation_id'
+            )}} as model_deployment_id,
+    
         invocation_id,
         event_model as model,
     
@@ -21,7 +26,7 @@ aggregated as (
     
     from events
     where event_name ilike '%model%'
-    group by 1, 2
+    group by 1, 2, 3
 
 )
 
