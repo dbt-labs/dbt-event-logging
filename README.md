@@ -1,4 +1,4 @@
-# dbt Event Logging
+## dbt Event Logging
 
 ---
 - [What is dbt](https://dbt.readme.io/docs/overview)?
