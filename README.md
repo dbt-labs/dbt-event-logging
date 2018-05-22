@@ -13,11 +13,15 @@ This package provides out-of-the-box functionality to log events for all dbt inv
 ### Setup
 
 1. Include this package in your `packages.yml`.
-2. Include the following in your `dbt_project.yml` directly within your `models:` directive:
+2. Include the following in your `dbt_project.yml` directly within your `models:` directive (making sure to handle indenting appropriately):
 
 ```YAML
 pre-hook: "{{ logging.log_model_start_event() }}"
 post-hook: "{{ logging.log_model_end_event() }}"
 ```
 
-That's it!
+That's it! You'll now have a stream of events for all dbt invocations in your warehouse. 
+
+### Adapter support
+
+This package is currently compatible with dbt's Snowflake, Redshift, and Postgres integrations.
