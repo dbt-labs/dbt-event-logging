@@ -27,7 +27,7 @@
     
     values (
         '{{ event_name }}', 
-        current_timestamp()::timestamp_ntz, 
+        {{dbt_utils.current_timestamp_in_utc()}}, 
         '{{ this.schema }}', 
         '{{ this.name }}',
         '{{ invocation_id }}'
@@ -46,7 +46,7 @@
     create table if not exists {{ logging.get_audit_relation() }}
     (
        event_name       varchar(512),
-       event_timestamp  timestampntz,
+       event_timestamp  {{dbt_utils.type_timestamp()}},
        event_schema     varchar(512),
        event_model      varchar(512),
        invocation_id    varchar(512)
