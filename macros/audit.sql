@@ -2,7 +2,7 @@
     {%- set audit_table = 
         api.Relation.create(
             identifier='dbt_audit_log', 
-            schema=target.schema~'_meta', 
+            schema=generate_schema_name_for_env(var('meta_schema')), 
             type='table'
         ) -%}
     {{ return(audit_table) }}
@@ -10,8 +10,7 @@
 
 
 {% macro get_audit_schema() %}
-    {% set audit_table = logging.get_audit_relation() %}
-    {{ return(audit_table.include(schema=True, identifier=False)) }}    
+    {{return(generate_schema_name_for_env(var('meta_schema')))}}
 {% endmacro %}
 
 

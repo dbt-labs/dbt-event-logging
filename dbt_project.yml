@@ -24,5 +24,9 @@ on-run-end:
 
 
 models:
+  
+  vars:
+    meta_schema: analytics_meta
+  
   logging:  
     schema: meta
