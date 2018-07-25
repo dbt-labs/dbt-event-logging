@@ -15,7 +15,7 @@
 {% endmacro %}
 
 
-{% macro log_audit_event(event_name) %}
+{% macro log_audit_event(event_name, schema, relation) %}
 
     insert into {{ logging.get_audit_relation() }} (
         event_name, 
@@ -28,8 +28,8 @@
     values (
         '{{ event_name }}', 
         {{dbt_utils.current_timestamp_in_utc()}}, 
-        '{{ this.schema }}', 
-        '{{ this.name }}',
+        {% if variable != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %}, 
+        {% if variable != None %}'{{ relation }}'{% else %}null::varchar(512){% endif %}, 
         '{{ invocation_id }}'
         )
 
@@ -66,10 +66,14 @@
 
 
 {% macro log_model_start_event() %}
-    {{logging.log_audit_event('model deployment started')}}
+    {{logging.log_audit_event(
+        'model deployment started', this.schema, this.name
+        )}}
 {% endmacro %}
 
 
 {% macro log_model_end_event() %}
-    {{logging.log_audit_event('model deployment completed')}}
+    {{logging.log_audit_event(
+        'model deployment completed', this.schema, this.name
+        )}}
 {% endmacro %}
