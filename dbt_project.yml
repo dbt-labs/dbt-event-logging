@@ -23,7 +23,7 @@ on-run-start:
 
 on-run-end:
   - "{{ logging.log_run_end_event( var('run_dbt_logging', false)) }}"
-  - "{{ logging.unload_to_s3( var('unload_to_s3', false) )}}"
+  - "{{ logging.unload_to_s3( var('unload_to_s3', false)) }}"
 
 
 models:
