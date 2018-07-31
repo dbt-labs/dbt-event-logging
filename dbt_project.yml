@@ -1,8 +1,10 @@
 name: 'logging'
 version: '1.0'
 
+profile: 'default'
+
 source-paths: ["models"]
-analysis-paths: ["analysis"] 
+analysis-paths: ["analysis"]
 test-paths: ["tests"]
 data-paths: ["data"]
 macro-paths: ["macros"]
@@ -17,12 +19,13 @@ on-run-start:
   - "{{ logging.create_audit_schema() }}"
   - "{{ logging.create_audit_log_table() }}"
   - "{{ logging.log_run_start_event() }}"
-  
-  
+
+
 on-run-end:
   - "{{ logging.log_run_end_event() }}"
+  - "{{ logging.unload_to_s3( var('unload_to_s3', false) )}}"
 
 
 models:
-  logging:  
+  logging:
     schema: meta
