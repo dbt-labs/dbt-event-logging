@@ -36,13 +36,16 @@
 {% endmacro %}
 
 
-{% macro create_audit_schema() %}
+{% macro create_audit_schema(run_dbt_logging=False) %}
+  {% if run_dbt_logging %}
     create schema if not exists {{ logging.get_audit_schema() }}
+  {% endif %}
 {% endmacro %}
 
 
-{% macro create_audit_log_table() %}
+{% macro create_audit_log_table(run_dbt_logging=False) %}
 
+  {% if run_dbt_logging %}
     create table if not exists {{ logging.get_audit_relation() }}
     (
        event_name       varchar(512),
@@ -51,31 +54,40 @@
        event_model      varchar(512),
        invocation_id    varchar(512)
     )
+  {% endif %}
 
 {% endmacro %}
 
 
-{% macro log_run_start_event() %}
+{% macro log_run_start_event(run_dbt_logging=False) %}
+  {% if run_dbt_logging %}
     {{logging.log_audit_event('run started')}}
+  {% endif %}
 {% endmacro %}
 
 
-{% macro log_run_end_event() %}
+{% macro log_run_end_event(run_dbt_logging=False) %}
+  {% if run_dbt_logging %}
     {{logging.log_audit_event('run completed')}}; commit;
+  {% endif %}
 {% endmacro %}
 
 
-{% macro log_model_start_event() %}
+{% macro log_model_start_event(run_dbt_logging=False) %}
+  {% if run_dbt_logging %}
     {{logging.log_audit_event(
         'model deployment started', this.schema, this.name
         )}}
+  {% endif %}
 {% endmacro %}
 
 
-{% macro log_model_end_event() %}
+{% macro log_model_end_event(run_dbt_logging=False) %}
+  {% if run_dbt_logging %}
     {{logging.log_audit_event(
         'model deployment completed', this.schema, this.name
         )}}
+  {% endif %}
 {% endmacro %}
 
 {% macro unload_to_s3(unload_to_s3=False) %}
