@@ -2,7 +2,7 @@
     {%- set audit_table =
         api.Relation.create(
             identifier='dbt_audit_log',
-            schema=target.schema~'_meta',
+            schema=target.schema~'_invocations',
             type='table'
         ) -%}
     {{ return(audit_table) }}
