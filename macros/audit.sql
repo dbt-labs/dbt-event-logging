@@ -95,7 +95,8 @@
 
 {% macro unload_to_s3(unload_to_s3=False) %}
   {% if unload_to_s3 %}
-    unload ('select dil.* from dbt_spectrum_redshift.dbt_invocation_logs dil union select d.* from {{ logging.get_audit_relation() }} d') to 's3://redshift-dbt-logs/dbt_invocation_logs/dbt_invocation_logs_' iam_role '{{ env_var('DBT_IAM_ROLE') }}' manifest delimiter as ',' null as '' escape allowoverwrite; commit; {{log(modules.datetime.datetime.now().strftime('%H:%M:%S') ~ ' | Unload to s3 requested for dbt invocation logs.', info=True)}}
+    unload ('select dil.* from dbt_spectrum_redshift.dbt_invocation_logs dil union select d.* from {{ logging.get_audit_relation() }} d') to 's3://redshift-dbt-logs/dbt_invocation_logs/dbt_invocation_logs_' iam_role '{{ env_var('DBT_IAM_ROLE') }}' manifest delimiter as ',' null as '' escape allowoverwrite
+    {{log(modules.datetime.datetime.now().strftime('%H:%M:%S') ~ ' | Unload to s3 requested for dbt invocation logs.', info=True)}}
   {% else %}
     select 1
   {% endif %}
