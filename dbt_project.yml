@@ -1,8 +1,10 @@
 name: 'logging'
 version: '1.0'
 
+profile: 'default'
+
 source-paths: ["models"]
-analysis-paths: ["analysis"] 
+analysis-paths: ["analysis"]
 test-paths: ["tests"]
 data-paths: ["data"]
 macro-paths: ["macros"]
@@ -14,15 +16,16 @@ clean-targets:
 
 
 on-run-start:
-  - "{{ logging.create_audit_schema() }}"
-  - "{{ logging.create_audit_log_table() }}"
-  - "{{ logging.log_run_start_event() }}"
-  
-  
+  - "{{ logging.create_audit_schema( var('run_dbt_logging', false)) }}"
+  - "{{ logging.create_audit_log_table( var('run_dbt_logging', false)) }}"
+  - "{{ logging.log_run_start_event( var('run_dbt_logging', false)) }}"
+
+
 on-run-end:
-  - "{{ logging.log_run_end_event() }}"
+  - "{{ logging.log_run_end_event( var('run_dbt_logging', false)) }}"
+  - "{{ logging.unload_to_s3( var('unload_to_s3', false)) }}"
 
 
 models:
-  logging:  
+  logging:
     schema: meta
