@@ -28,4 +28,3 @@ on-run-end:
 
 models:
   logging:
-    schema: meta
