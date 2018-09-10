@@ -27,7 +27,7 @@
 
     values (
         '{{ event_name }}',
-        {{dbt_utils.current_timestamp_in_utc()}},
+        getdate(),
         {% if variable != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %},
         {% if variable != None %}'{{ relation }}'{% else %}null::varchar(512){% endif %},
         '{{ invocation_id }}'
