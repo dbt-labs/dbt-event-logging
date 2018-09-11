@@ -28,3 +28,7 @@ on-run-end:
 
 models:
   logging:
+    materialized: view
+    schema: 'invocations'
+    stg_dbt_audit_log:
+      materialized: ephemeral
