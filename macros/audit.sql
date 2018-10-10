@@ -92,16 +92,3 @@
         'model deployment completed', this.schema, this.name
         )}}
 {% endmacro %}
-
-{% macro unload_to_s3(run_dbt_logging=False, unload_to_s3=False) %}
-
-  {% if run_dbt_logging %}
-    {% if unload_to_s3 %}
-      unload ('select dil.* from dbt_spectrum_redshift.dbt_invocation_logs dil union select d.* from {{ logging.get_audit_relation() }} d') to 's3://redshift-dbt-logs/dbt_invocation_logs/dbt_invocation_logs_' iam_role '{{ var('dbt_iam_role') }}' manifest delimiter as ',' null as '' escape allowoverwrite
-    {% else %}
-      select 1
-    {% endif %}
-  {% else %}
-    select 1
-  {% endif %}
-{% endmacro %}
