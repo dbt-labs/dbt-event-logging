@@ -8,6 +8,8 @@
 
 ---
 
+Requires dbt >= 0.12.2
+
 This package provides out-of-the-box functionality to log events for all dbt invocations, including run start, run end, model start, and model end. It outputs all data and models to schema `[target.schema]_meta`. There are three convenience models to make it easier to parse the event log data.
 
 ### Setup
