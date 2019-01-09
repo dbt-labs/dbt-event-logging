@@ -15,13 +15,14 @@
 {% endmacro %}
 
 
-{% macro log_audit_event(event_name, schema, relation) %}
+{% macro log_audit_event(event_name, schema, relation, is_full_refresh) %}
 
     insert into {{ logging.get_audit_relation() }} (
         event_name,
         event_timestamp,
         event_schema,
         event_model,
+        is_full_refresh,
         invocation_id
         )
 
@@ -30,6 +31,7 @@
         getdate(),
         {% if variable != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %},
         {% if variable != None %}'{{ relation }}'{% else %}null::varchar(512){% endif %},
+        '{{ is_full_refresh }}',
         '{{ invocation_id }}'
         )
 
@@ -53,6 +55,7 @@
        event_timestamp  {{dbt_utils.type_timestamp()}},
        event_schema     varchar(512),
        event_model      varchar(512),
+       is_full_refresh  boolean,
        invocation_id    varchar(512)
     )
   {% else %}
@@ -64,7 +67,9 @@
 
 {% macro log_run_start_event(run_dbt_logging=False) %}
   {% if run_dbt_logging %}
-    {{logging.log_audit_event('run started')}}
+    {{logging.log_audit_event(
+        event_name='run started', is_full_refresh=flags.FULL_REFRESH
+        )}}
   {% else %}
     select 1
   {% endif %}
@@ -73,7 +78,9 @@
 
 {% macro log_run_end_event(run_dbt_logging=False) %}
   {% if run_dbt_logging %}
-    {{logging.log_audit_event('run completed')}}
+    {{logging.log_audit_event(
+        event_name='run completed', is_full_refresh=flags.FULL_REFRESH
+        )}}
   {% else %}
     select 1
   {% endif %}
@@ -82,13 +89,13 @@
 
 {% macro log_model_start_event() %}
     {{logging.log_audit_event(
-        'model deployment started', this.schema, this.name
+        event_name='model deployment started', schema=this.schema, relation=this.name, is_full_refresh=flags.FULL_REFRESH
         )}}
 {% endmacro %}
 
 
 {% macro log_model_end_event() %}
     {{logging.log_audit_event(
-        'model deployment completed', this.schema, this.name
+        event_name='model deployment completed', schema=this.schema, relation=this.name, is_full_refresh=flags.FULL_REFRESH
         )}}
 {% endmacro %}
