@@ -10,6 +10,6 @@
    `target/compiled/logging/analysis/periscope/models_out_of_sla.sql`
 6. Adjust SLA in the SQL query if desired (default is 24 hours)
 7. Repeat for:
-  - Table named Models Summary - [Daterange]
-  - Line chart with two axes named [Aggregation] Deployments - [Daterange]
-  - Area chart named [Aggregation] Models - [Daterange]
+    - Table named Models Summary - [Daterange]
+    - Line chart with two axes named [Aggregation] Deployments - [Daterange]
+    - Area chart named [Aggregation] Models - [Daterange]
