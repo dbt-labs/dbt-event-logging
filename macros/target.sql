@@ -43,7 +43,7 @@
 
   {%- else -%}
 
-    select 1 as test --need to return something
+    select 1 as test
 
   {%- endif -%}
 {% endmacro %}
@@ -58,7 +58,7 @@
 
   {%- else -%}
 
-    select 1 as test --need to return something
+    select 1 as test
 
   {%- endif -%}
 {% endmacro %}
