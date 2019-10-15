@@ -22,4 +22,5 @@ on-run-end:
 
 models:
   logging:
+    enabled: false
     schema: logging
