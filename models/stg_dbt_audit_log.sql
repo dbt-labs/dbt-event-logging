@@ -6,16 +6,16 @@ with audit as (
 
 with_id as (
 
-    select 
-    
+    select
+
         *,
-    
+
         {{dbt_utils.surrogate_key(
-            'event_name', 
-            'event_model', 
+            'event_name',
+            'event_model',
             'invocation_id'
             )}} as event_id
-    
+
     from audit
 
 )
