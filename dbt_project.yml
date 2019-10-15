@@ -13,14 +13,9 @@ clean-targets:
     - "dbt_modules"
 
 on-run-start:
-  - "{{ logging.logging_target_create_audit_schema() }}"
-  - "{{ logging.logging_target_create_audit_log_table() }}"
-  - "{{ logging.logging_target_start() }}"
+  - "{{ logging.log_target_create_audit_schema() }}"
+  - "{{ logging.log_target_create_audit_log_table() }}"
+  - "{{ logging.log_run_target_start_event() }}"
 
 on-run-end:
-  - "{{ logging.logging_target_end() }}"
-
-models:
-  logging:
-    enabled: false
-    schema: logging
+  - "{{ logging.log_run_target_end_event() }}"
