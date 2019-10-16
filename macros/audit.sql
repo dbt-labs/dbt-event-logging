@@ -25,7 +25,7 @@
         invocation_id
         )
 
-    values (gs
+    values (
         '{{ event_name }}',
         {{dbt_utils.current_timestamp_in_utc()}},
         {% if variable != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %},
