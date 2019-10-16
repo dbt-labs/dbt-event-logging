@@ -20,8 +20,8 @@ There are three convenience models to make it easier to parse the event log data
 2. Include the following in your `dbt_project.yml` directly within your `models:` directive (making sure to handle indenting appropriately):
 
 ```YAML
-pre-hook: "{{ logging.log_model_target_start_event() }}"
-post-hook: "{{ logging.log_model_target_end_event() }}"
+pre-hook: "{{ logging.log_model_start_event() }}"
+post-hook: "{{ logging.log_model_end_event() }}"
 ```
 
 That's it! You'll now have a stream of events for all dbt invocations in your warehouse.
