@@ -1,3 +1,9 @@
+{{
+    config(
+        enabled=false
+    )
+}}
+
 with audit as (
 
     select * from {{this.schema}}.dbt_audit_log
