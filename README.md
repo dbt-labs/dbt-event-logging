@@ -1,12 +1,9 @@
 ## dbt Event Logging
+> :warning: **ADDING THIS PACKAGE TO YOUR DBT PROJECT CAN SIGNIFICANTLY SLOW
+DOWN YOUR DBT RUNS**. This is due to the number of insert statements executed by
+this package, especially as a post-hook. Please consider if this package is
+appropriate for your use case before using it.
 
----
-- [What is dbt](https://dbt.readme.io/docs/overview)?
-- Read the [dbt viewpoint](https://dbt.readme.io/docs/viewpoint)
-- [Installation](https://dbt.readme.io/docs/installation)
-- Join the [chat](http://ac-slackin.herokuapp.com/) on Slack for live questions and support.
-
----
 
 Requires dbt >= 0.12.2
 
@@ -23,8 +20,13 @@ for installation instructions.
 `models:` block (making sure to handle indenting appropriately):
 
 ```YAML
-pre-hook: "{{ logging.log_model_start_event() }}"
-post-hook: "{{ logging.log_model_end_event() }}"
+# dbt_project.yml
+...
+
+models:
+  ...
+  pre-hook: "{{ logging.log_model_start_event() }}"
+  post-hook: "{{ logging.log_model_end_event() }}"
 ```
 
 That's it! You'll now have a stream of events for all dbt invocations in your
