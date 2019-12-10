@@ -34,7 +34,6 @@ This macro gets back a dictionary like:
 
     -- only include passed models (is this the best way to find it?)
     {% if not result.error and result.skipped == False %}
-        {{ log('we made it', info=True) }}
 
         {% set model_result={} %}
 
@@ -62,7 +61,7 @@ This macro gets back a dictionary like:
 -- add the target to the run audit
 {% set run_target={} %}
 
-{% for key in get_target_keys() %}
+{% for key in logging.get_target_keys() %}
     {% do run_target.update({key: target[key]}) %}
 {% endfor %}
 
@@ -75,7 +74,9 @@ This macro gets back a dictionary like:
 
 {% do run_audit.update({'flags': run_flags}) %}
 
-{{ log(run_audit, info=True) }}
+{#- Escape quotes -#}
+{{ return(run_audit | replace("'", "''")) }}
+
 
 select 1;
 {% endmacro %}
@@ -87,5 +88,5 @@ select 1;
         'user',
         'database',
         'schema'
-        ]) }}
+    ]) }}
 {% endmacro %}

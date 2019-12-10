@@ -18,11 +18,10 @@ clean-targets:
 on-run-start:
   - "{{ logging.create_audit_schema() }}"
   - "{{ logging.create_audit_log_table() }}"
-  - "{{ logging.log_run_start_event() }}"
 
 
 on-run-end:
-  - "{{ logging.log_run_end_event() }}"
+  - "{{ logging.log_run_end_event(results, flags, target) }}"
 
 
 models:

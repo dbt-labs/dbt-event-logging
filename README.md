@@ -16,21 +16,6 @@ convenience models to make it easier to parse the event log data.
 
 1. Include this package in your `packages.yml` -- check [here](https://hub.getdbt.com/fishtown-analytics/logging/latest/)
 for installation instructions.
-2. Include the following in your `dbt_project.yml` directly within your
-`models:` block (making sure to handle indenting appropriately):
-
-```YAML
-# dbt_project.yml
-...
-
-models:
-  ...
-  pre-hook: "{{ logging.log_model_start_event() }}"
-  post-hook: "{{ logging.log_model_end_event() }}"
-```
-
-That's it! You'll now have a stream of events for all dbt invocations in your
-warehouse.
 
 ### Adapter support
 This package is currently compatible with dbt's Snowflake, Redshift, and
