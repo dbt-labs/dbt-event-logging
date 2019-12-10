@@ -6,23 +6,24 @@ with events as (
 
 aggregated as (
 
-    select 
-    
+    select
+
         invocation_id,
-    
-        min(case 
-            when event_name = 'run started' then event_timestamp 
+
+        min(case
+            when event_name = 'run started' then event_timestamp
             end) as deployment_started_at,
-    
-        min(case 
-            when event_name = 'run completed' then event_timestamp 
+
+        min(case
+            when event_name = 'run completed' then event_timestamp
             end) as deployment_completed_at,
-            
-        count(distinct case 
-            when event_name ilike '%model%' then event_model 
+
+        count(distinct case
+            when event_name ilike '%model%' then event_model
             end) as models_deployed
-    
+
     from events
+
     group by 1
 
 )
