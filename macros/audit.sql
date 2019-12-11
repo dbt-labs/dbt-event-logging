@@ -1,19 +1,24 @@
+{% macro get_audit_schema() %}
+
+    {{ return(target.schema~'_meta') }}
+
+{% endmacro %}
+
 {% macro get_audit_relation() %}
+
+    {%- set audit_schema=logging.get_audit_schema() -%}
+
     {%- set audit_table =
         api.Relation.create(
+            database=target.database,
+            schema=audit_schema,
             identifier='dbt_audit_log',
-            schema=target.schema~'_meta',
             type='table'
         ) -%}
+
     {{ return(audit_table) }}
+
 {% endmacro %}
-
-
-{% macro get_audit_schema() %}
-    {% set audit_table = logging.get_audit_relation() %}
-    {{ return(audit_table.include(schema=True, identifier=False)) }}
-{% endmacro %}
-
 
 {% macro log_audit_event(event_name, schema, relation) %}
 
