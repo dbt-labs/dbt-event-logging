@@ -16,3 +16,6 @@ test-snowflake:
 
 test-all: test-postgres test-redshift test-snowflake
 	echo "Completed successfully"
+
+test-cloud: test-redshift test-snowflake
+	echo "Completed successfully"
