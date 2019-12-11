@@ -41,6 +41,8 @@ jobs:
             . venv/bin/activate
             cd integration_tests
             dbt deps
+            dbt run-operation drop_audit_schema --target postgres
+            dbt run --target postgres --full-refresh
             dbt run --target postgres
 
       - run:
@@ -50,6 +52,8 @@ jobs:
             echo `pwd`
             cd integration_tests
             dbt deps
+            dbt run-operation drop_audit_schema --target redshift
+            dbt run --target redshift --full-refresh
             dbt run --target redshift
 
       - run:
@@ -59,6 +63,8 @@ jobs:
             echo `pwd`
             cd integration_tests
             dbt deps
+            dbt run-operation drop_audit_schema --target snowflake
+            dbt run --target snowflake --full-refresh
             dbt run --target snowflake
 
       - save_cache:
