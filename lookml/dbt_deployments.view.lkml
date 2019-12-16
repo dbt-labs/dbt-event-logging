@@ -46,17 +46,12 @@ view: dbt_deployments {
     sql: ${TABLE}.models_deployed ;;
   }
 
-  dimension: duration_in_s {
-    type: number
-    label: "Duration (seconds)"
-    sql: datediff(s, ${deployment_started_time}, ${deployment_completed_time}) ;;
-  }
-
-  dimension: duration_in_m {
-    type: number
-    label: "Duration (minutes)"
-    sql: ${duration_in_s}::float / 60 ;;
-    value_format_name: decimal_2
+  dimension: duration {
+    type: duration
+    dimension_group: dimension_group_name {
+    sql_start: ${deployment_started_raw} ;;
+    sql_end: ${deployment_completed_raw} ;;
+    intervals: [second, minute]
   }
 
   measure: count {

@@ -2,10 +2,12 @@ name: 'logging'
 version: '1.0'
 
 source-paths: ["models"]
-analysis-paths: ["analysis"] 
+analysis-paths: ["analysis"]
 test-paths: ["tests"]
 data-paths: ["data"]
 macro-paths: ["macros"]
+
+require-dbt-version: ">=0.14.0"
 
 target-path: "target"
 clean-targets:
@@ -17,12 +19,12 @@ on-run-start:
   - "{{ logging.create_audit_schema() }}"
   - "{{ logging.create_audit_log_table() }}"
   - "{{ logging.log_run_start_event() }}"
-  
-  
+
+
 on-run-end:
   - "{{ logging.log_run_end_event() }}"
 
 
 models:
-  logging:  
+  logging:
     schema: meta

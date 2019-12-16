@@ -1,21 +1,21 @@
 with audit as (
 
-    select * from {{this.schema}}.dbt_audit_log
+    select * from {{ get_audit_relation() }}
 
 ),
 
 with_id as (
 
-    select 
-    
+    select
+
         *,
-    
-        {{dbt_utils.surrogate_key(
-            'event_name', 
-            'event_model', 
+
+        {{ dbt_utils.surrogate_key(
+            'event_name',
+            'event_model',
             'invocation_id'
-            )}} as event_id
-    
+        ) }} as event_id
+
     from audit
 
 )
