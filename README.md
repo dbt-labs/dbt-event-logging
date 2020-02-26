@@ -1,11 +1,11 @@
 ## dbt Event Logging
+
 > :warning: **ADDING THIS PACKAGE TO YOUR DBT PROJECT CAN SIGNIFICANTLY SLOW
-DOWN YOUR DBT RUNS**. This is due to the number of insert statements executed by
-this package, especially as a post-hook. Please consider if this package is
-appropriate for your use case before using it.
+> DOWN YOUR DBT RUNS**. This is due to the number of insert statements executed by
+> this package, especially as a post-hook. Please consider if this package is
+> appropriate for your use case before using it.
 
-
-Requires dbt >= 0.12.2
+Requires dbt >= 0.14.0
 
 This package provides out-of-the-box functionality to log events for all dbt
 invocations, including run start, run end, model start, and model end. It
@@ -15,9 +15,9 @@ convenience models to make it easier to parse the event log data.
 ### Setup
 
 1. Include this package in your `packages.yml` -- check [here](https://hub.getdbt.com/fishtown-analytics/logging/latest/)
-for installation instructions.
+   for installation instructions.
 2. Include the following in your `dbt_project.yml` directly within your
-`models:` block (making sure to handle indenting appropriately):
+   `models:` block (making sure to handle indenting appropriately):
 
 ```YAML
 # dbt_project.yml
@@ -33,5 +33,18 @@ That's it! You'll now have a stream of events for all dbt invocations in your
 warehouse.
 
 ### Adapter support
+
 This package is currently compatible with dbt's Snowflake, Redshift, and
 Postgres integrations.
+
+### Migration guide
+
+#### v0.1.17 -> v0.2.0
+
+New columns were added in v0.2.0:
+
+-   **event_user as user** - `varchar(512)`the user who ran the model
+-   **event_target as target** - `varchar(512)` the target used when running DBT
+-   **event_is_full_refresh as is_full_refresh** - `boolean` whether the DBT run was a full refresh
+
+These will be added to your existing audit table automatically in the `on-run-start` DBT hook, and added to the staging tables deployed by this table when they are ran. The existing `event_schema` column will also be propagated into to `stg_dbt_model_deployments` as `schema`.

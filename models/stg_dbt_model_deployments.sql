@@ -15,6 +15,10 @@ aggregated as (
 
         invocation_id,
         event_model as model,
+        event_schema as schema,
+        event_user as user,
+        event_target as target,
+        event_is_full_refresh as is_full_refresh,
 
         min(case
             when event_name = 'model deployment started' then event_timestamp
@@ -28,7 +32,7 @@ aggregated as (
 
     where event_name ilike '%model%'
 
-    group by 1, 2, 3
+    {{ dbt_utils.group_by(n=7) }}
 
 )
 

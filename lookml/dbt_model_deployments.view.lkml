@@ -52,6 +52,26 @@ view: dbt_model_deployments {
     sql: ${TABLE}.MODEL ;;
   }
 
+  dimension: schema {
+    type: string
+    sql: ${TABLE}.SCHEMA ;;
+  }
+
+  dimension: user {
+    type: string
+    sql: ${TABLE}.USER ;;
+  }
+
+  dimension: target {
+    type: string
+    sql: ${TABLE}.TARGET ;;
+  }
+
+  dimension: is_full_refresh {
+    type: boolean
+    sql: ${TABLE}.IS_FULL_REFRESH ;;
+  }
+
   dimension: duration {
     type: duration
     dimension_group: dimension_group_name {
