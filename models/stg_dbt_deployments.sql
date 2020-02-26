@@ -9,6 +9,9 @@ aggregated as (
     select
 
         invocation_id,
+        event_user as user,
+        event_target as target,
+        event_is_full_refresh as is_full_refresh,
 
         min(case
             when event_name = 'run started' then event_timestamp
@@ -24,7 +27,7 @@ aggregated as (
 
     from events
 
-    group by 1
+    {{ dbt_utils.group_by(n=4) }}
 
 )
 
