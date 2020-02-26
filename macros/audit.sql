@@ -74,7 +74,8 @@
 
         {%- set columns_to_create = [] -%}
 
-        {%- set existing_columns = adapter.get_columns_in_relation(audit_table)|map(attribute='column')|list -%}
+        {# map to lower to cater for snowflake returning column names as upper case #}
+        {%- set existing_columns = adapter.get_columns_in_relation(audit_table)|map(attribute='column')|map('lower')|list -%}
 
         {%- for required_column in required_columns -%}
             {%- if required_column[0] not in existing_columns -%}
