@@ -39,9 +39,9 @@ Postgres integrations.
 
 ### Migration guide
 
-#### v0.1.17 -> UNRELEASED
+#### v0.1.17 -> v0.2.0
 
-New columns were added in UNRELEASED:
+New columns were added in v0.2.0:
 
 -   **event_user as user** - `varchar(512)`the user who ran the model
 -   **event_target as target** - `varchar(512)` the target used when running DBT
