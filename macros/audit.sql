@@ -91,8 +91,7 @@
             default null;
         {% endfor -%}
 
-
-        {-% if columns_to_create|length > 0 %}
+        {%- if columns_to_create|length > 0 %}
             commit;
         {% endif -%}
 
