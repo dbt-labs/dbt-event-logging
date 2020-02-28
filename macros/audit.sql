@@ -91,6 +91,10 @@
             default null;
         {% endfor -%}
 
+        {%- if columns_to_create|length > 0 %}
+            commit;
+        {% endif -%}
+
     {%- else -%}
         create table if not exists {{ audit_table }}
         (
