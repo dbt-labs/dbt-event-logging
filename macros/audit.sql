@@ -42,7 +42,9 @@
         {% if variable != None %}'{{ target_name }}'{% else %}null::varchar(512){% endif %},
         {% if variable != None %}{% if is_full_refresh %}TRUE{% else %}FALSE{% endif %}{% else %}null::boolean{% endif %},
         '{{ invocation_id }}'
-    )
+    );
+    
+    commit;
 
 {% endmacro %}
 
@@ -113,7 +115,7 @@
 
 
 {% macro log_run_end_event() %}
-    {{ logging.log_audit_event('run completed', user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH) }}; commit;
+    {{ logging.log_audit_event('run completed', user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH) }}
 {% endmacro %}
 
 
