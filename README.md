@@ -5,7 +5,7 @@
 > this package, especially as a post-hook. Please consider if this package is
 > appropriate for your use case before using it.
 
-Requires dbt >= 0.14.0
+Requires dbt >= 0.16.0
 
 This package provides out-of-the-box functionality to log events for all dbt
 invocations, including run start, run end, model start, and model end. It
@@ -31,6 +31,21 @@ models:
 
 That's it! You'll now have a stream of events for all dbt invocations in your
 warehouse.
+
+#### Customising audit schema
+
+It's possible to customise the audit schema for any project by adding a macro named: `get_audit_schema` into your DBT project.
+
+For example to always log into a specific schema, say `analytics_meta`, regardless of DBT schema, you can include the following in your project:
+
+```sql
+-- your_dbt_project/macros/get_audit_schema.sql
+{% macro get_audit_schema() %}
+
+   {{ return('analytics_meta') }}
+
+{% endmacro %}
+```
 
 ### Adapter support
 

@@ -1,6 +1,11 @@
 {% macro get_audit_schema() %}
 
-    {{ return(target.schema~'_meta') }}
+    {# if the get_audit_schema macro exists in the base project use that #}
+    {% if context.get(project_name, {}).get('get_audit_schema') %}
+        {{ return(context[project_name].get_audit_schema()) }}
+    {% else %}
+        {{ return(target.schema~'_meta') }}
+    {% endif %}
 
 {% endmacro %}
 
