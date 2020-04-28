@@ -36,14 +36,14 @@
     values (
         '{{ event_name }}',
         {{ dbt_utils.current_timestamp_in_utc() }},
-        {% if variable != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %},
-        {% if variable != None %}'{{ relation }}'{% else %}null::varchar(512){% endif %},
-        {% if variable != None %}'{{ user }}'{% else %}null::varchar(512){% endif %},
-        {% if variable != None %}'{{ target_name }}'{% else %}null::varchar(512){% endif %},
-        {% if variable != None %}{% if is_full_refresh %}TRUE{% else %}FALSE{% endif %}{% else %}null::boolean{% endif %},
+        {% if schema != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %},
+        {% if relation != None %}'{{ relation }}'{% else %}null::varchar(512){% endif %},
+        {% if user != None %}'{{ user }}'{% else %}null::varchar(512){% endif %},
+        {% if target_name != None %}'{{ target_name }}'{% else %}null::varchar(512){% endif %},
+        {% if is_full_refresh %}TRUE{% else %}FALSE{% endif %},
         '{{ invocation_id }}'
     );
-    
+
     commit;
 
 {% endmacro %}
