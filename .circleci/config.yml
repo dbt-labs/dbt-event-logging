@@ -40,7 +40,7 @@ jobs:
           command: |
             . venv/bin/activate
             cd integration_tests
-            dbt deps
+            dbt deps --target postgres
             dbt run-operation drop_audit_schema --target postgres
             dbt run --target postgres --full-refresh
             dbt run --target postgres
@@ -56,7 +56,7 @@ jobs:
             . venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt deps
+            dbt deps --target redshift
             dbt run-operation drop_audit_schema --target redshift
             dbt run --target redshift --full-refresh
             dbt run --target redshift
@@ -72,7 +72,7 @@ jobs:
             . venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt deps
+            dbt deps --target snowflake
             dbt run-operation drop_audit_schema --target snowflake
             dbt run --target snowflake --full-refresh
             dbt run --target snowflake
