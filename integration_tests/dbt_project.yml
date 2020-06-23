@@ -1,6 +1,6 @@
 
 name: 'event_logging_integration_tests'
-version: '0.2.0'
+version: '0.3.0'
 config-version: 2
 
 profile: 'integration_tests'

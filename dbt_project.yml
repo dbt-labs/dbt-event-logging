@@ -1,5 +1,5 @@
 name: 'logging'
-version: '0.2.0'
+version: '0.3.0'
 config-version: 2
 
 require-dbt-version: [">=0.17.0"]
@@ -29,4 +29,5 @@ on-run-end:
 
 
 models:
+  logging:
     +schema: meta
