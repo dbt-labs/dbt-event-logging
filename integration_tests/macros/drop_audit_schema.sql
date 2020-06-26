@@ -2,7 +2,8 @@
     {% set audit_schema=logging.get_audit_schema() %}
 
     {% if adapter.check_schema_exists(target.database, audit_schema) %}
-        {% do drop_schema(target.database, audit_schema) %}
+        {% set audit_schema_relation = api.Relation.create(database=target.database, schema=audit_schema).without_identifier() %}
+        {% do drop_schema(audit_schema_relation) %}
         {% do run_query("commit;") %}
         {{ dbt_utils.log_info("Audit schema dropped")}}
 

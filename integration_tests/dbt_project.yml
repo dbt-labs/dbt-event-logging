@@ -1,10 +1,10 @@
 
 name: 'event_logging_integration_tests'
-version: '1.0'
+version: '0.3.0'
+config-version: 2
 
 profile: 'integration_tests'
 
-require-dbt-version: ">=0.15.0"
 
 models:
   pre-hook: "{{ logging.log_model_start_event() }}"

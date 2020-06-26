@@ -5,7 +5,7 @@
 > this package, especially as a post-hook. Please consider if this package is
 > appropriate for your use case before using it.
 
-Requires dbt >= 0.16.0
+Requires dbt >= 0.17.0
 
 This package provides out-of-the-box functionality to log events for all dbt
 invocations, including run start, run end, model start, and model end. It
@@ -63,3 +63,6 @@ New columns were added in v0.2.0:
 -   **event_is_full_refresh as is_full_refresh** - `boolean` whether the DBT run was a full refresh
 
 These will be added to your existing audit table automatically in the `on-run-start` DBT hook, and added to the staging tables deployed by this table when they are ran. The existing `event_schema` column will also be propagated into to `stg_dbt_model_deployments` as `schema`.
+
+###Contributing
+Additional contributions to this repo are very welcome! Check out [this](https://discourse.getdbt.com/t/contributing-to-an-external-dbt-package/657) post on the best workflow for contributing to a package. All PRs should only include functionality that is contained within all Segment deployments; no implementation-specific details should be included.
