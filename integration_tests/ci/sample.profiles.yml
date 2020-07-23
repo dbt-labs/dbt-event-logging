@@ -14,7 +14,7 @@ integration_tests:
       host: "{{ env_var('POSTGRES_TEST_HOST') }}"
       user: "{{ env_var('POSTGRES_TEST_USER') }}"
       pass: "{{ env_var('POSTGRES_TEST_PASS') }}"
-      port: "{{ env_var('POSTGRES_TEST_PORT') }}"
+      port: "{{ env_var('POSTGRES_TEST_PORT') | as_number }}"
       dbname: "{{ env_var('POSTGRES_TEST_DBNAME') }}"
       schema: event_logging_integration_tests_postgres
       threads: 1
@@ -25,10 +25,10 @@ integration_tests:
       user: "{{ env_var('REDSHIFT_TEST_USER') }}"
       pass: "{{ env_var('REDSHIFT_TEST_PASS') }}"
       dbname: "{{ env_var('REDSHIFT_TEST_DBNAME') }}"
-      port: "{{ env_var('REDSHIFT_TEST_PORT') }}"
+      port: "{{ env_var('REDSHIFT_TEST_PORT') | as_number }}"
       schema: event_logging_integration_tests_redshift
       threads: 1
-      
+
     snowflake:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_TEST_ACCOUNT') }}"
