@@ -10,11 +10,11 @@ with_id as (
 
         *,
 
-        {{ dbt_utils.surrogate_key(
+        {{ dbt_utils.surrogate_key([
             'event_name',
             'event_model',
             'invocation_id'
-        ) }} as event_id
+        ]) }} as event_id
 
     from audit
 
