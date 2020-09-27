@@ -49,8 +49,10 @@ For example to always log into a specific schema, say `analytics_meta`, regardle
 
 ### Adapter support
 
-This package is currently compatible with dbt's Snowflake, Redshift, and
+This package is currently compatible with dbt's BigQuery<sup>1</sup>, Snowflake, Redshift, and
 Postgres integrations.
+
+<sup>1</sup> BigQuery support may only work when 1 thread is set in your `profiles.yml` file. Anything larger may result in "quota exceeded" errors.  
 
 ### Migration guide
 

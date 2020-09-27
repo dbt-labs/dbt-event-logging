@@ -25,7 +25,14 @@
 
 {% endmacro %}
 
-{% macro log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) %}
+
+{% macro log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) -%}
+
+  {{ return(adapter.dispatch('log_audit_event', packages=['logging'])(event_name, schema, relation, user, target_name, is_full_refresh)) }}
+
+{% endmacro %}
+
+{% macro default__log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) %}
 
     insert into {{ logging.get_audit_relation() }} (
         event_name,
@@ -55,11 +62,21 @@
 
 
 {% macro create_audit_schema() %}
-    create schema if not exists {{ logging.get_audit_schema() }}
+    {% do create_schema(api.Relation.create(
+        database=target.project,
+        schema=logging.get_audit_schema())
+    ) %}
 {% endmacro %}
 
 
 {% macro create_audit_log_table() -%}
+
+    {{ return(adapter.dispatch('create_audit_log_table', packages=['logging'])()) }}
+
+{% endmacro %}
+
+
+{% macro default__create_audit_log_table() -%}
 
     {% set required_columns = [
        ["event_name", "varchar(512)"],
@@ -125,7 +142,7 @@
 
 
 {% macro log_model_start_event() %}
-    {{logging.log_audit_event(
+    {{ logging.log_audit_event(
         'model deployment started', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
     ) }}
 {% endmacro %}
@@ -134,5 +151,12 @@
 {% macro log_model_end_event() %}
     {{ logging.log_audit_event(
         'model deployment completed', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
+    ) }}
+{% endmacro %}
+
+
+{% macro log_custom_event(event_name) %}
+    {{ logging.log_audit_event(
+        event_name, schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
     ) }}
 {% endmacro %}
