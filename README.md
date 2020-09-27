@@ -5,7 +5,7 @@
 > this package, especially as a post-hook. Please consider if this package is
 > appropriate for your use case before using it.
 
-Requires dbt >= 0.17.0
+Requires dbt >= 0.18.0
 
 This package provides out-of-the-box functionality to log events for all dbt
 invocations, including run start, run end, model start, and model end. It
