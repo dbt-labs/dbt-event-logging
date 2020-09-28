@@ -78,6 +78,22 @@ jobs:
             dbt --warn-error run --target snowflake --full-refresh
             dbt --warn-error run --target snowflake
 
+      - run:
+         name: "Run Tests - BigQuery"
+         command: |
+           . venv/bin/activate
+           echo `pwd`
+           cd integration_tests
+           dbt --warn-error deps --target bigquery
+           dbt --warn-error run-operation drop_audit_schema --target bigquery
+           dbt --warn-error run --target bigquery --full-refresh
+           dbt --warn-error run --target bigquery
+
+           dbt --warn-error run-operation drop_audit_schema --target bigquery
+           dbt --warn-error run-operation create_legacy_audit_table --target bigquery
+           dbt --warn-error run --target bigquery --full-refresh
+           dbt --warn-error run --target bigquery
+
       - save_cache:
           key: deps1-{{ .Branch }}
           paths:
