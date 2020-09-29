@@ -5,9 +5,9 @@
     {{ logging.create_audit_schema() }}
 
     {% if adapter.type() == 'bigquery' %}
-        {{ set string_type = 'string' }}
+        {% set string_type = 'string' %}
     {% else %}
-        {{ set string_type = 'varchar(512)' }}
+        {% set string_type = 'varchar(512)' %}
     {% endif %}
 
     create table if not exists {{ logging.get_audit_relation() }}
