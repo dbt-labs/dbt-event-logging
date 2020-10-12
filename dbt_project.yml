@@ -30,6 +30,6 @@ models:
   logging:
     +schema: meta
     bigquery:
-      +enabled: '{{ target.type == "bigquery" }}'
+      +enabled: '{{ target.type == "bigquery" | as_bool }}'
     default:
-      +enabled: '{{ target.type != "bigquery" }}'
+      +enabled: '{{ target.type == "bigquery" | as_bool }}'

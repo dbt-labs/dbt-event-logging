@@ -63,7 +63,7 @@
 
 {% macro create_audit_schema() %}
     {% do create_schema(api.Relation.create(
-        database=target.project,
+        database=target.database,
         schema=logging.get_audit_schema())
     ) %}
 {% endmacro %}
@@ -79,14 +79,14 @@
 {% macro default__create_audit_log_table() -%}
 
     {% set required_columns = [
-       ["event_name", "varchar(512)"],
+       ["event_name", {{ dbt_utils.type_string() }}],
        ["event_timestamp", dbt_utils.type_timestamp()],
-       ["event_schema", "varchar(512)"],
-       ["event_model", "varchar(512)"],
-       ["event_user", "varchar(512)"],
-       ["event_target", "varchar(512)"],
+       ["event_schema", {{ dbt_utils.type_string() }}],
+       ["event_model", {{ dbt_utils.type_string() }}],
+       ["event_user", {{ dbt_utils.type_string() }}],
+       ["event_target", {{ dbt_utils.type_string() }}],
        ["event_is_full_refresh", "boolean"],
-       ["invocation_id", "varchar(512)"],
+       ["invocation_id", {{ dbt_utils.type_string() }}],
     ] -%}
 
     {% set audit_table = logging.get_audit_relation() -%}
