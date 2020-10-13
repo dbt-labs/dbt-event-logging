@@ -26,13 +26,13 @@
 {% macro bigquery__create_audit_log_table() -%}
 
     {% set required_columns = [
-       ["event_name", {{ dbt_utils.type_string() }}],
+       ["event_name", dbt_utils.type_string()],
        ["event_timestamp", dbt_utils.type_timestamp()],
-       ["event_schema", {{ dbt_utils.type_string() }}],
-       ["event_model", {{ dbt_utils.type_string() }}],
-       ["event_target", {{ dbt_utils.type_string() }}],
+       ["event_schema", dbt_utils.type_string()],
+       ["event_model", dbt_utils.type_string()],
+       ["event_target", dbt_utils.type_string()],
        ["event_is_full_refresh", "BOOLEAN"],
-       ["invocation_id", {{ dbt_utils.type_string() }}],
+       ["invocation_id", dbt_utils.type_string()],
     ] -%}
 
     {% set audit_table = logging.get_audit_relation() -%}
