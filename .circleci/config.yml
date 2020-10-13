@@ -10,6 +10,11 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          run: setup_creds
+          command: |
+            echo $BIGQUERY_SERVICE_ACCOUNT_JSON > ${HOME}/bigquery-service-key.json
+
       - restore_cache:
           key: deps1-{{ .Branch }}
 
