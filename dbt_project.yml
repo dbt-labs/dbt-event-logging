@@ -32,4 +32,4 @@ models:
     bigquery:
       +enabled: '{{ target.type == "bigquery" | as_bool }}'
     default:
-      +enabled: '{{ target.type == "bigquery" | as_bool }}'
+      +enabled: '{{ target.type != "bigquery" | as_bool }}'
