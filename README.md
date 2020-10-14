@@ -5,7 +5,7 @@
 > this package, especially as a post-hook. Please consider if this package is
 > appropriate for your use case before using it.
 
-Requires dbt >= 0.17.0
+Requires dbt >= 0.18.0
 
 This package provides out-of-the-box functionality to log events for all dbt
 invocations, including run start, run end, model start, and model end. It
@@ -49,8 +49,10 @@ For example to always log into a specific schema, say `analytics_meta`, regardle
 
 ### Adapter support
 
-This package is currently compatible with dbt's Snowflake, Redshift, and
+This package is currently compatible with dbt's BigQuery<sup>1</sup>, Snowflake, Redshift, and
 Postgres integrations.
+
+<sup>1</sup> BigQuery support may only work when 1 thread is set in your `profiles.yml` file. Anything larger may result in "quota exceeded" errors.  
 
 ### Migration guide
 

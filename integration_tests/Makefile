@@ -31,7 +31,19 @@ test-snowflake:
 	dbt run --target snowflake --full-refresh
 	dbt run --target snowflake
 
-test-all: test-postgres test-redshift test-snowflake
+
+test-bigquery:
+	dbt run-operation drop_audit_schema --target bigquery
+	dbt run --target bigquery --full-refresh
+	dbt run --target bigquery
+
+
+	dbt run-operation drop_audit_schema --target bigquery
+	dbt run-operation create_legacy_audit_table --target bigquery
+	dbt run --target bigquery --full-refresh
+	dbt run --target bigquery
+
+test-all: test-postgres test-redshift test-snowflake test-bigquery
 	echo "Completed successfully"
 
 test-cloud: test-redshift test-snowflake

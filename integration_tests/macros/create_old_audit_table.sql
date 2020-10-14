@@ -6,11 +6,11 @@
 
     create table if not exists {{ logging.get_audit_relation() }}
     (
-       event_name       varchar(512),
-       event_timestamp  {{dbt_utils.type_timestamp()}},
-       event_schema     varchar(512),
-       event_model      varchar(512),
-       invocation_id    varchar(512)
+       event_name       {{ dbt_utils.type_string() }},
+       event_timestamp  {{ dbt_utils.type_timestamp() }},
+       event_schema     {{ dbt_utils.type_string() }},
+       event_model      {{ dbt_utils.type_string() }},
+       invocation_id    {{ dbt_utils.type_string() }}
     )
-    {{ dbt_utils.log_info("Created legacy audit table") }}
+    {% do dbt_utils.log_info("Created legacy audit table") %}
 {% endmacro %}

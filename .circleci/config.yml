@@ -10,6 +10,11 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          run: setup_creds
+          command: |
+            echo $BIGQUERY_SERVICE_ACCOUNT_JSON > ${HOME}/bigquery-service-key.json
+
       - restore_cache:
           key: deps1-{{ .Branch }}
 
@@ -77,6 +82,25 @@ jobs:
             dbt --warn-error run-operation create_legacy_audit_table --target snowflake
             dbt --warn-error run --target snowflake --full-refresh
             dbt --warn-error run --target snowflake
+
+      - run:
+          name: "Run Tests - BigQuery"
+          environment:
+              BIGQUERY_SERVICE_KEY_PATH: "/home/circleci/bigquery-service-key.json"
+
+          command: |
+            . venv/bin/activate
+            echo `pwd`
+            cd integration_tests
+            dbt --warn-error deps --target bigquery
+            dbt --warn-error run-operation drop_audit_schema --target bigquery
+            dbt --warn-error run --target bigquery --full-refresh
+            dbt --warn-error run --target bigquery
+
+            dbt --warn-error run-operation drop_audit_schema --target bigquery
+            dbt --warn-error run-operation create_legacy_audit_table --target bigquery
+            dbt --warn-error run --target bigquery --full-refresh
+            dbt --warn-error run --target bigquery
 
       - save_cache:
           key: deps1-{{ .Branch }}
