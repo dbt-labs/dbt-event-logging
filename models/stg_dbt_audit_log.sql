@@ -6,7 +6,7 @@
 
 with audit as (
 
-    select * from {{this.schema}}.dbt_audit_log
+    select * from {{ get_audit_relation() }}
 
 ),
 
@@ -16,11 +16,11 @@ with_id as (
 
         *,
 
-        {{dbt_utils.surrogate_key([
+        {{ dbt_utils.surrogate_key([
             'event_name',
             'event_model',
             'invocation_id'
-        ])}} as event_id
+        ]) }} as event_id
 
     from audit
 

@@ -52,17 +52,32 @@ view: dbt_model_deployments {
     sql: ${TABLE}.MODEL ;;
   }
 
-  dimension: duration_in_s {
-    type: number
-    label: "Duration (seconds)"
-    sql: datediff(s, ${deployment_started_raw}, ${deployment_completed_raw}) ;;
+  dimension: schema {
+    type: string
+    sql: ${TABLE}.SCHEMA ;;
   }
 
-  dimension: duration_in_m {
-    type: number
-    label: "Duration (minutes)"
-    sql: ${duration_in_s}::float / 60 ;;
-    value_format_name: decimal_2
+  dimension: user {
+    type: string
+    sql: ${TABLE}.USER ;;
+  }
+
+  dimension: target {
+    type: string
+    sql: ${TABLE}.TARGET ;;
+  }
+
+  dimension: is_full_refresh {
+    type: boolean
+    sql: ${TABLE}.IS_FULL_REFRESH ;;
+  }
+
+  dimension: duration {
+    type: duration
+    dimension_group: dimension_group_name {
+    sql_start: ${deployment_started_raw} ;;
+    sql_end: SQL deployment_completed_raw ;;
+    intervals: [second, minute]
   }
 
   measure: count {

@@ -24,6 +24,21 @@ view: dbt_audit_log {
     sql: ${TABLE}.EVENT_SCHEMA ;;
   }
 
+  dimension: event_user {
+    type: string
+    sql: ${TABLE}.EVENT_USER ;;
+  }
+
+  dimension: event_target {
+    type: string
+    sql: ${TABLE}.EVENT_TARGET ;;
+  }
+
+  dimension: event_is_full_refresh {
+    type: boolean
+    sql: ${TABLE}.EVENT_IS_FULL_REFRESH ;;
+  }
+
   dimension_group: event_timestamp {
     type: time
     timeframes: [

@@ -1,5 +1,8 @@
 name: 'logging'
-version: '1.0'
+version: '0.3.0'
+config-version: 2
+
+require-dbt-version: ">=0.18.0"
 
 config-version: 2
 
@@ -19,5 +22,15 @@ on-run-start:
   - "{{ logging.create_audit_log_table() }}"
   - "{{ logging.log_run_start_event() }}"
 
+
 on-run-end:
   - "{{ logging.log_run_end_event() }}"
+
+
+models:
+  logging:
+    +schema: meta
+    bigquery:
+      +enabled: '{{ target.type == "bigquery" | as_bool }}'
+    default:
+      +enabled: '{{ target.type != "bigquery" | as_bool }}'
