@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.3-stretch
+      - image: circleci/python:3.6.13-stretch
       - image: circleci/postgres:9.6.5-alpine-ram
 
     steps:
@@ -25,7 +25,7 @@ jobs:
             . venv/bin/activate
 
             pip install --upgrade pip setuptools
-            pip install dbt
+            pip install --pre dbt
 
             mkdir -p ~/.dbt
             cp integration_tests/ci/sample.profiles.yml ~/.dbt/profiles.yml
