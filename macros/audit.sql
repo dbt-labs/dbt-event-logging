@@ -62,10 +62,14 @@
 
 
 {% macro create_audit_schema() %}
-    {% do create_schema(api.Relation.create(
-        database=target.database,
-        schema=logging.get_audit_schema())
-    ) %}
+    {%- set schema_name = logging.get_audit_schema() -%}
+    {%- set schema_exists = adapter.check_schema_exists(database=target.database, schema=schema_name) -%}
+    {% if schema_exists == 0 %}
+        {% do create_schema(api.Relation.create(
+            database=target.database,
+            schema=schema_name)
+        ) %}
+    {% endif %}
 {% endmacro %}
 
 
