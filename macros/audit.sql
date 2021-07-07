@@ -28,7 +28,7 @@
 
 {% macro log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) -%}
 
-  {{ return(adapter.dispatch('log_audit_event', packages=['logging'])(event_name, schema, relation, user, target_name, is_full_refresh)) }}
+  {{ return(adapter.dispatch('log_audit_event', 'logging')(event_name, schema, relation, user, target_name, is_full_refresh)) }}
 
 {% endmacro %}
 
@@ -75,7 +75,7 @@
 
 {% macro create_audit_log_table() -%}
 
-    {{ return(adapter.dispatch('create_audit_log_table', packages=['logging'])()) }}
+    {{ return(adapter.dispatch('create_audit_log_table', 'logging')()) }}
 
 {% endmacro %}
 

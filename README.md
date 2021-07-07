@@ -14,7 +14,7 @@ convenience models to make it easier to parse the event log data.
 
 ### Setup
 
-1. Include this package in your `packages.yml` -- check [here](https://hub.getdbt.com/fishtown-analytics/logging/latest/)
+1. Include this package in your `packages.yml` -- check [here](https://hub.getdbt.com/dbt-labs/logging/latest/)
    for installation instructions.
 2. Include the following in your `dbt_project.yml` directly within your
    `models:` block (making sure to handle indenting appropriately):
