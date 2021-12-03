@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.13-stretch
+      - image: cimg/python:3.9.9
       - image: circleci/postgres:9.6.5-alpine-ram
 
     steps:
@@ -21,8 +21,8 @@ jobs:
       - run:
           name: "Setup dbt"
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
+            python3 -m venv dbt_venv
+            . dbt_venv/bin/activate
 
             pip install --upgrade pip setuptools
             pip install --pre dbt
@@ -39,49 +39,49 @@ jobs:
             POSTGRES_TEST_PORT: 5432
             POSTGRES_TEST_DBNAME: circle_test
           command: |
-            . venv/bin/activate
+            . dbt_venv/bin/activate
             cd integration_tests
-            dbt --warn-error deps --target postgres
-            dbt --warn-error run-operation drop_audit_schema --target postgres
-            dbt --warn-error run --target postgres --full-refresh
-            dbt --warn-error run --target postgres
+            dbt deps --target postgres
+            dbt run-operation drop_audit_schema --target postgres
+            dbt run --target postgres --full-refresh
+            dbt run --target postgres
 
-            dbt --warn-error run-operation drop_audit_schema --target postgres
-            dbt --warn-error run-operation create_legacy_audit_table --target postgres
-            dbt --warn-error run --target postgres --full-refresh
-            dbt --warn-error run --target postgres
+            dbt run-operation drop_audit_schema --target postgres
+            dbt run-operation create_legacy_audit_table --target postgres
+            dbt run --target postgres --full-refresh
+            dbt run --target postgres
 
       - run:
           name: "Run Tests - Redshift"
           command: |
-            . venv/bin/activate
+            . dbt_venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt --warn-error deps --target redshift
-            dbt --warn-error run-operation drop_audit_schema --target redshift
-            dbt --warn-error run --target redshift --full-refresh
-            dbt --warn-error run --target redshift
+            dbt deps --target redshift
+            dbt run-operation drop_audit_schema --target redshift
+            dbt run --target redshift --full-refresh
+            dbt run --target redshift
 
-            dbt --warn-error run-operation drop_audit_schema --target redshift
-            dbt --warn-error run-operation create_legacy_audit_table --target redshift
-            dbt --warn-error run --target redshift --full-refresh
-            dbt --warn-error run --target redshift
+            dbt run-operation drop_audit_schema --target redshift
+            dbt run-operation create_legacy_audit_table --target redshift
+            dbt run --target redshift --full-refresh
+            dbt run --target redshift
 
       - run:
           name: "Run Tests - Snowflake"
           command: |
-            . venv/bin/activate
+            . dbt_venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt --warn-error deps --target snowflake
-            dbt --warn-error run-operation drop_audit_schema --target snowflake
-            dbt --warn-error run --target snowflake --full-refresh
-            dbt --warn-error run --target snowflake
+            dbt deps --target snowflake
+            dbt run-operation drop_audit_schema --target snowflake
+            dbt run --target snowflake --full-refresh
+            dbt run --target snowflake
 
-            dbt --warn-error run-operation drop_audit_schema --target snowflake
-            dbt --warn-error run-operation create_legacy_audit_table --target snowflake
-            dbt --warn-error run --target snowflake --full-refresh
-            dbt --warn-error run --target snowflake
+            dbt run-operation drop_audit_schema --target snowflake
+            dbt run-operation create_legacy_audit_table --target snowflake
+            dbt run --target snowflake --full-refresh
+            dbt run --target snowflake
 
       - run:
           name: "Run Tests - BigQuery"
@@ -89,20 +89,20 @@ jobs:
               BIGQUERY_SERVICE_KEY_PATH: "/home/circleci/bigquery-service-key.json"
 
           command: |
-            . venv/bin/activate
+            . dbt_venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt --warn-error deps --target bigquery
-            dbt --warn-error run-operation drop_audit_schema --target bigquery
-            dbt --warn-error run --target bigquery --full-refresh
-            dbt --warn-error run --target bigquery
+            dbt deps --target bigquery
+            dbt run-operation drop_audit_schema --target bigquery
+            dbt run --target bigquery --full-refresh
+            dbt run --target bigquery
 
-            dbt --warn-error run-operation drop_audit_schema --target bigquery
-            dbt --warn-error run-operation create_legacy_audit_table --target bigquery
-            dbt --warn-error run --target bigquery --full-refresh
-            dbt --warn-error run --target bigquery
+            dbt run-operation drop_audit_schema --target bigquery
+            dbt run-operation create_legacy_audit_table --target bigquery
+            dbt run --target bigquery --full-refresh
+            dbt run --target bigquery
 
       - save_cache:
           key: deps1-{{ .Branch }}
           paths:
-            - "venv"
+            - "dbt_venv"
