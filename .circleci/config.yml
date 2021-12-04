@@ -15,8 +15,8 @@ jobs:
           command: |
             echo $BIGQUERY_SERVICE_ACCOUNT_JSON > ${HOME}/bigquery-service-key.json
 
-      - restore_cache:
-          key: deps1-{{ .Branch }}
+      # - restore_cache:
+      #     key: deps1-{{ .Branch }}
 
       - run:
           name: "Setup dbt"
@@ -102,7 +102,7 @@ jobs:
             dbt --warn-error run --target bigquery --full-refresh
             dbt --warn-error run --target bigquery
 
-      - save_cache:
-          key: deps1-{{ .Branch }}
-          paths:
-            - "dbt_venv"
+      # - save_cache:
+      #     key: deps1-{{ .Branch }}
+      #     paths:
+      #       - "dbt_venv"
