@@ -2,18 +2,18 @@ name: 'logging'
 version: '0.5.0'
 config-version: 2
 
-require-dbt-version: [">=0.20.0", "<1.1.0"]
+require-dbt-version: [">=1.0.0", "<2.0.0"]
 
-source-paths: ["models"]
-analysis-paths: ["analysis"]
+model-paths: ["models"]
+analysis-paths: ["analyses"]
 test-paths: ["tests"]
-data-paths: ["data"]
+seed-paths: ["seeds"]
 macro-paths: ["macros"]
 
 target-path: "target"
 clean-targets:
     - "target"
-    - "dbt_modules"
+    - "dbt_packages"
 
 
 on-run-start:
