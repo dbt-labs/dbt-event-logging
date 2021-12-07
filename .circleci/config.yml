@@ -25,7 +25,7 @@ jobs:
             . dbt_venv/bin/activate
 
             pip install --upgrade pip setuptools
-            pip install --pre dbt
+            pip install --pre dbt-core dbt-postgres dbt-redshift dbt-snowflake dbt-bigquery
 
             mkdir -p ~/.dbt
             cp integration_tests/ci/sample.profiles.yml ~/.dbt/profiles.yml
@@ -41,15 +41,15 @@ jobs:
           command: |
             . dbt_venv/bin/activate
             cd integration_tests
-            dbt deps --target postgres
-            dbt run-operation drop_audit_schema --target postgres
-            dbt run --target postgres --full-refresh
-            dbt run --target postgres
+            dbt --warn-error deps --target postgres
+            dbt --warn-error run-operation drop_audit_schema --target postgres
+            dbt --warn-error run --target postgres --full-refresh
+            dbt --warn-error run --target postgres
 
-            dbt run-operation drop_audit_schema --target postgres
-            dbt run-operation create_legacy_audit_table --target postgres
-            dbt run --target postgres --full-refresh
-            dbt run --target postgres
+            dbt --warn-error run-operation drop_audit_schema --target postgres
+            dbt --warn-error run-operation create_legacy_audit_table --target postgres
+            dbt --warn-error run --target postgres --full-refresh
+            dbt --warn-error run --target postgres
 
       - run:
           name: "Run Tests - Redshift"
@@ -57,15 +57,15 @@ jobs:
             . dbt_venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt deps --target redshift
-            dbt run-operation drop_audit_schema --target redshift
-            dbt run --target redshift --full-refresh
-            dbt run --target redshift
+            dbt --warn-error deps --target redshift
+            dbt --warn-error run-operation drop_audit_schema --target redshift
+            dbt --warn-error run --target redshift --full-refresh
+            dbt --warn-error run --target redshift
 
-            dbt run-operation drop_audit_schema --target redshift
-            dbt run-operation create_legacy_audit_table --target redshift
-            dbt run --target redshift --full-refresh
-            dbt run --target redshift
+            dbt --warn-error run-operation drop_audit_schema --target redshift
+            dbt --warn-error run-operation create_legacy_audit_table --target redshift
+            dbt --warn-error run --target redshift --full-refresh
+            dbt --warn-error run --target redshift
 
       - run:
           name: "Run Tests - Snowflake"
@@ -73,15 +73,15 @@ jobs:
             . dbt_venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt deps --target snowflake
-            dbt run-operation drop_audit_schema --target snowflake
-            dbt run --target snowflake --full-refresh
-            dbt run --target snowflake
+            dbt --warn-error deps --target snowflake
+            dbt --warn-error run-operation drop_audit_schema --target snowflake
+            dbt --warn-error run --target snowflake --full-refresh
+            dbt --warn-error run --target snowflake
 
-            dbt run-operation drop_audit_schema --target snowflake
-            dbt run-operation create_legacy_audit_table --target snowflake
-            dbt run --target snowflake --full-refresh
-            dbt run --target snowflake
+            dbt --warn-error run-operation drop_audit_schema --target snowflake
+            dbt --warn-error run-operation create_legacy_audit_table --target snowflake
+            dbt --warn-error run --target snowflake --full-refresh
+            dbt --warn-error run --target snowflake
 
       - run:
           name: "Run Tests - BigQuery"
@@ -92,15 +92,15 @@ jobs:
             . dbt_venv/bin/activate
             echo `pwd`
             cd integration_tests
-            dbt deps --target bigquery
-            dbt run-operation drop_audit_schema --target bigquery
-            dbt run --target bigquery --full-refresh
-            dbt run --target bigquery
+            dbt --warn-error deps --target bigquery
+            dbt --warn-error run-operation drop_audit_schema --target bigquery
+            dbt --warn-error run --target bigquery --full-refresh
+            dbt --warn-error run --target bigquery
 
-            dbt run-operation drop_audit_schema --target bigquery
-            dbt run-operation create_legacy_audit_table --target bigquery
-            dbt run --target bigquery --full-refresh
-            dbt run --target bigquery
+            dbt --warn-error run-operation drop_audit_schema --target bigquery
+            dbt --warn-error run-operation create_legacy_audit_table --target bigquery
+            dbt --warn-error run --target bigquery --full-refresh
+            dbt --warn-error run --target bigquery
 
       - save_cache:
           key: deps1-{{ .Branch }}
