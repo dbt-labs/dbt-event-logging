@@ -26,34 +26,15 @@
 {% endmacro %}
 
 
-{% macro create_audit_schema() %}
-    {%- set schema_name = logging.get_audit_schema() -%}
-    {%- set schema_exists = adapter.check_schema_exists(database=target.database, schema=schema_name) -%}
-    {% if schema_exists == 0 %}
-        {% do create_schema(api.Relation.create(
-            schema=schema_name)
-        ) %}
-    {% endif %}
-{% endmacro %}
-
-
-{% macro create_audit_log_table() -%}
-
-    {{ return(adapter.dispatch('create_audit_log_table', 'logging')()) }}
-
-{% endmacro %}
-
-
-{% macro default__create_audit_log_table() -%}
+{% macro spark__create_audit_log_table() -%}
 
     {% set required_columns = [
        ["event_name", dbt_utils.type_string()],
        ["event_timestamp", dbt_utils.type_timestamp()],
        ["event_schema", dbt_utils.type_string()],
        ["event_model", dbt_utils.type_string()],
-       ["event_user", dbt_utils.type_string()],
        ["event_target", dbt_utils.type_string()],
-       ["event_is_full_refresh", "boolean"],
+       ["event_is_full_refresh", "BOOLEAN"],
        ["invocation_id", dbt_utils.type_string()],
     ] -%}
 
@@ -83,10 +64,6 @@
             default null;
         {% endfor -%}
 
-        {%- if columns_to_create|length > 0 %}
-            commit;
-        {% endif -%}
-
     {%- else -%}
         create table if not exists {{ audit_table }}
         (
@@ -97,34 +74,3 @@
     {%- endif -%}
 
 {%- endmacro %}
-
-
-{% macro log_run_start_event() %}
-    {{ logging.log_audit_event('run started', user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH) }}
-{% endmacro %}
-
-
-{% macro log_run_end_event() %}
-    {{ logging.log_audit_event('run completed', user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH) }}
-{% endmacro %}
-
-
-{% macro log_model_start_event() %}
-    {{ logging.log_audit_event(
-        'model deployment started', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
-{% endmacro %}
-
-
-{% macro log_model_end_event() %}
-    {{ logging.log_audit_event(
-        'model deployment completed', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
-{% endmacro %}
-
-
-{% macro log_custom_event(event_name) %}
-    {{ logging.log_audit_event(
-        event_name, schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
-{% endmacro %}
