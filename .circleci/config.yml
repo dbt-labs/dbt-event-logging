@@ -25,7 +25,7 @@ jobs:
             . dbt_venv/bin/activate
 
             pip install --upgrade pip setuptools
-            pip install --pre dbt-core dbt-postgres dbt-redshift dbt-snowflake dbt-bigquery
+            pip install --pre dbt-core dbt-postgres dbt-redshift dbt-snowflake dbt-bigquery dbt-spark
 
             mkdir -p ~/.dbt
             cp integration_tests/ci/sample.profiles.yml ~/.dbt/profiles.yml
@@ -101,6 +101,25 @@ jobs:
             dbt --warn-error run-operation create_legacy_audit_table --target bigquery
             dbt --warn-error run --target bigquery --full-refresh
             dbt --warn-error run --target bigquery
+
+      - run:
+          name: "Run Tests - Spark"
+          environment:
+              BIGQUERY_SERVICE_KEY_PATH: "/home/circleci/bigquery-service-key.json"
+
+          command: |
+            . dbt_venv/bin/activate
+            echo `pwd`
+            cd integration_tests
+            dbt --warn-error deps --target spark
+            dbt --warn-error run-operation drop_audit_schema --target spark
+            dbt --warn-error run --target spark --full-refresh
+            dbt --warn-error run --target spark
+
+            dbt --warn-error run-operation drop_audit_schema --target spark
+            dbt --warn-error run-operation create_legacy_audit_table --target spark
+            dbt --warn-error run --target spark --full-refresh
+            dbt --warn-error run --target spark
 
       - save_cache:
           key: deps1-{{ .Branch }}

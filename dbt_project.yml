@@ -31,5 +31,7 @@ models:
     +schema: meta
     bigquery:
       +enabled: '{{ target.type == "bigquery" | as_bool }}'
+    spark:
+      +enabled: '{{ target.type == "spark" | as_bool }}'
     default:
-      +enabled: '{{ target.type != "bigquery" | as_bool }}'
+      +enabled: '{{ target.type != "bigquery" and target.type == "spark" | as_bool }}'

@@ -1,24 +1,9 @@
-{% macro get_audit_schema() %}
+{% macro spark__get_audit_relation() %}
 
-    {# if the get_audit_schema macro exists in the base project use that #}
-    {% if context.get(project_name, {}).get('get_audit_schema') %}
-        {{ return(context[project_name].get_audit_schema()) }}
-    {% else %}
-        {{ return(target.schema~'_meta') }}
-    {% endif %}
-
-{% endmacro %}
-
-{% macro get_audit_relation() -%}
-  {{ return(adapter.dispatch('get_audit_relation', 'logging')()) }}
-{%- endmacro %}
-
-{% macro default__get_audit_relation() %}
     {%- set audit_schema=logging.get_audit_schema() -%}
 
     {%- set audit_table =
         api.Relation.create(
-            database=target.database,
             schema=audit_schema,
             identifier='dbt_audit_log',
             type='table'
@@ -29,14 +14,7 @@
 {% endmacro %}
 
 
-
-{% macro log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) -%}
-
-  {{ return(adapter.dispatch('log_audit_event', 'logging')(event_name, schema, relation, user, target_name, is_full_refresh)) }}
-
-{% endmacro %}
-
-{% macro default__log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) %}
+{% macro spark__log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) %}
 
     insert into {{ logging.get_audit_relation() }} (
         event_name,
@@ -51,7 +29,7 @@
 
     values (
         '{{ event_name }}',
-        {{ dbt_utils.current_timestamp_in_utc() }},
+        {{ dbt_utils.current_timestamp() }},
         {% if schema != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %},
         {% if relation != None %}'{{ relation }}'{% else %}null::varchar(512){% endif %},
         {% if user != None %}'{{ user }}'{% else %}null::varchar(512){% endif %},
@@ -60,36 +38,22 @@
         '{{ invocation_id }}'
     );
 
-    commit;
 
 {% endmacro %}
 
 
-{% macro create_audit_schema() %}
-  {{ return(adapter.dispatch('create_audit_schema', 'logging')()) }}
-{% endmacro %}
-
-
-{% macro default__create_audit_schema() %}
+{% macro spark__create_audit_schema() %}
     {%- set schema_name = logging.get_audit_schema() -%}
     {%- set schema_exists = adapter.check_schema_exists(database=target.database, schema=schema_name) -%}
     {% if schema_exists == 0 %}
         {% do create_schema(api.Relation.create(
-            database=target.database,
             schema=schema_name)
         ) %}
     {% endif %}
 {% endmacro %}
 
 
-{% macro create_audit_log_table() -%}
-
-    {{ return(adapter.dispatch('create_audit_log_table', 'logging')()) }}
-
-{% endmacro %}
-
-
-{% macro default__create_audit_log_table() -%}
+{% macro spark__create_audit_log_table() -%}
 
     {% set required_columns = [
        ["event_name", dbt_utils.type_string()],
@@ -143,33 +107,3 @@
 
 {%- endmacro %}
 
-
-{% macro log_run_start_event() %}
-    {{ logging.log_audit_event('run started', user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH) }}
-{% endmacro %}
-
-
-{% macro log_run_end_event() %}
-    {{ logging.log_audit_event('run completed', user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH) }}
-{% endmacro %}
-
-
-{% macro log_model_start_event() %}
-    {{ logging.log_audit_event(
-        'model deployment started', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
-{% endmacro %}
-
-
-{% macro log_model_end_event() %}
-    {{ logging.log_audit_event(
-        'model deployment completed', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
-{% endmacro %}
-
-
-{% macro log_custom_event(event_name) %}
-    {{ logging.log_audit_event(
-        event_name, schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
-{% endmacro %}

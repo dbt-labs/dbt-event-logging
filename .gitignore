@@ -5,3 +5,7 @@ logs/
 
 # pycharm
 .idea/
+
+# studio
+.lh
+.vscode
