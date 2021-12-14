@@ -9,8 +9,11 @@
 
 {% endmacro %}
 
-{% macro get_audit_relation() %}
+{% macro get_audit_relation() -%}
+  {{ return(adapter.dispatch('get_audit_relation', 'logging')()) }}
+{%- endmacro %}
 
+{% macro default__get_audit_relation() %}
     {%- set audit_schema=logging.get_audit_schema() -%}
 
     {%- set audit_table =
@@ -24,6 +27,7 @@
     {{ return(audit_table) }}
 
 {% endmacro %}
+
 
 
 {% macro log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) -%}
@@ -61,16 +65,7 @@
 {% endmacro %}
 
 
-{% macro create_audit_schema() %}
-    {%- set schema_name = logging.get_audit_schema() -%}
-    {%- set schema_exists = adapter.check_schema_exists(database=target.database, schema=schema_name) -%}
-    {% if schema_exists == 0 %}
-        {% do create_schema(api.Relation.create(
-            database=target.database,
-            schema=schema_name)
-        ) %}
-    {% endif %}
-{% endmacro %}
+
 
 
 {% macro create_audit_log_table() -%}

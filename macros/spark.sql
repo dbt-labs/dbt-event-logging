@@ -1,3 +1,19 @@
+{% macro spark__get_audit_relation() %}
+
+    {%- set audit_schema=logging.get_audit_schema() -%}
+
+    {%- set audit_table =
+        api.Relation.create(
+            schema=audit_schema,
+            identifier='dbt_audit_log',
+            type='table'
+        ) -%}
+
+    {{ return(audit_table) }}
+
+{% endmacro %}
+
+
 {% macro spark__log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) %}
 
     insert into {{ logging.get_audit_relation() }} (
@@ -26,6 +42,17 @@
 {% endmacro %}
 
 
+{% macro spark__create_audit_schema() %}
+    {%- set schema_name = logging.get_audit_schema() -%}
+    {%- set schema_exists = adapter.check_schema_exists(database=target.database, schema=schema_name) -%}
+    {% if schema_exists == 0 %}
+        {% do create_schema(api.Relation.create(
+            schema=schema_name)
+        ) %}
+    {% endif %}
+{% endmacro %}
+
+
 {% macro spark__create_audit_log_table() -%}
 
     {% set required_columns = [
@@ -33,8 +60,9 @@
        ["event_timestamp", dbt_utils.type_timestamp()],
        ["event_schema", dbt_utils.type_string()],
        ["event_model", dbt_utils.type_string()],
+       ["event_user", dbt_utils.type_string()],
        ["event_target", dbt_utils.type_string()],
-       ["event_is_full_refresh", "BOOLEAN"],
+       ["event_is_full_refresh", "boolean"],
        ["invocation_id", dbt_utils.type_string()],
     ] -%}
 
@@ -64,6 +92,10 @@
             default null;
         {% endfor -%}
 
+        {%- if columns_to_create|length > 0 %}
+            commit;
+        {% endif -%}
+
     {%- else -%}
         create table if not exists {{ audit_table }}
         (
@@ -74,3 +106,4 @@
     {%- endif -%}
 
 {%- endmacro %}
+
