@@ -1,37 +1,4 @@
-{% macro get_audit_schema() %}
-
-    {# if the get_audit_schema macro exists in the base project use that #}
-    {% if context.get(project_name, {}).get('get_audit_schema') %}
-        {{ return(context[project_name].get_audit_schema()) }}
-    {% else %}
-        {{ return(target.schema~'_meta') }}
-    {% endif %}
-
-{% endmacro %}
-
-{% macro get_audit_relation() %}
-
-    {%- set audit_schema=logging.get_audit_schema() -%}
-
-    {%- set audit_table =
-        api.Relation.create(
-            schema=audit_schema,
-            identifier='dbt_audit_log',
-            type='table'
-        ) -%}
-
-    {{ return(audit_table) }}
-
-{% endmacro %}
-
-
-{% macro log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) -%}
-
-  {{ return(adapter.dispatch('log_audit_event', 'logging')(event_name, schema, relation, user, target_name, is_full_refresh)) }}
-
-{% endmacro %}
-
-{% macro default__log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) %}
+{% macro spark__log_audit_event(event_name, schema, relation, user, target_name, is_full_refresh) %}
 
     insert into {{ logging.get_audit_relation() }} (
         event_name,
