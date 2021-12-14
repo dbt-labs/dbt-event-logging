@@ -29,7 +29,7 @@
 
     values (
         '{{ event_name }}',
-        {{ dbt_utils.current_timestamp_in_utc() }},
+        {{ dbt_utils.current_timestamp() }},
         {% if schema != None %}'{{ schema }}'{% else %}null::varchar(512){% endif %},
         {% if relation != None %}'{{ relation }}'{% else %}null::varchar(512){% endif %},
         {% if user != None %}'{{ user }}'{% else %}null::varchar(512){% endif %},
