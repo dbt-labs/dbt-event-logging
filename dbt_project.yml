@@ -15,6 +15,8 @@ clean-targets:
     - "target"
     - "dbt_packages"
 
+vars:
+    event_log_target_name: prod
 
 on-run-start:
   - "{{ logging.create_audit_schema() }}"

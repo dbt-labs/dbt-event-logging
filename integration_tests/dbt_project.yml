@@ -5,6 +5,8 @@ config-version: 2
 
 profile: 'integration_tests'
 
+vars:
+    event_log_target_name: prod
 
 models:
   pre-hook: "{{ logging.log_model_start_event() }}"

@@ -155,21 +155,30 @@
 
 
 {% macro log_model_start_event() %}
-    {{ logging.log_audit_event(
-        'model deployment started', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
+    {%- set target_name = var('event_log_target_name') -%}
+    {% if target.name==target_name %}
+        {{ logging.log_audit_event(
+            'model deployment started', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
+        ) }}
+    {% endif %}
 {% endmacro %}
 
 
 {% macro log_model_end_event() %}
-    {{ logging.log_audit_event(
-        'model deployment completed', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
+    {%- set target_name = var('event_log_target_name') -%}
+    {% if target.name==target_name %}
+        {{ logging.log_audit_event(
+            'model deployment completed', schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
+        ) }}
+    {% endif %}
 {% endmacro %}
 
 
 {% macro log_custom_event(event_name) %}
-    {{ logging.log_audit_event(
-        event_name, schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
-    ) }}
+    {%- set target_name = var('event_log_target_name') -%}
+    {% if target.name==target_name %}
+        {{ logging.log_audit_event(
+            event_name, schema=this.schema, relation=this.name, user=target.user, target_name=target.name, is_full_refresh=flags.FULL_REFRESH
+        ) }}
+    {% endif %}
 {% endmacro %}
