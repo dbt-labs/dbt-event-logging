@@ -23,10 +23,11 @@
 {% macro get_audit_relation() %}
 
     {%- set audit_schema=logging.get_audit_schema() -%}
+    {%- set audit_database=logging.get_audit_database() -%}
 
     {%- set audit_table =
         api.Relation.create(
-            database=get_audit_database,
+            database=audit_database,
             schema=audit_schema,
             identifier='dbt_audit_log',
             type='table'
