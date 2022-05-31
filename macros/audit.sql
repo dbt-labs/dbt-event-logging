@@ -9,13 +9,24 @@
 
 {% endmacro %}
 
+{% macro get_audit_database() %}
+
+    {# if the get_audit_database macro exists in the base project use that #}
+    {% if context.get(project_name, {}).get('get_audit_database') %}
+        {{ return(context[project_name].get_audit_database()) }}
+    {% else %}
+        {{ return(target.database) }}
+    {% endif %}
+
+{% endmacro %}
+
 {% macro get_audit_relation() %}
 
     {%- set audit_schema=logging.get_audit_schema() -%}
 
     {%- set audit_table =
         api.Relation.create(
-            database=target.database,
+            database=get_audit_database,
             schema=audit_schema,
             identifier='dbt_audit_log',
             type='table'
