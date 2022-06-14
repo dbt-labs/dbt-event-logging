@@ -9,13 +9,25 @@
 
 {% endmacro %}
 
+{% macro get_audit_database() %}
+
+    {# if the get_audit_database macro exists in the base project use that #}
+    {% if context.get(project_name, {}).get('get_audit_database') %}
+        {{ return(context[project_name].get_audit_database()) }}
+    {% else %}
+        {{ return(target.database) }}
+    {% endif %}
+
+{% endmacro %}
+
 {% macro get_audit_relation() %}
 
     {%- set audit_schema=logging.get_audit_schema() -%}
+    {%- set audit_database=logging.get_audit_database() -%}
 
     {%- set audit_table =
         api.Relation.create(
-            database=target.database,
+            database=audit_database,
             schema=audit_schema,
             identifier='dbt_audit_log',
             type='table'
@@ -63,10 +75,11 @@
 
 {% macro create_audit_schema() %}
     {%- set schema_name = logging.get_audit_schema() -%}
-    {%- set schema_exists = adapter.check_schema_exists(database=target.database, schema=schema_name) -%}
+    {%- set database_name = logging.get_audit_database() -%}
+    {%- set schema_exists = adapter.check_schema_exists(database=database_name, schema=schema_name) -%}
     {% if schema_exists == 0 %}
         {% do create_schema(api.Relation.create(
-            database=target.database,
+            database=database_name,
             schema=schema_name)
         ) %}
     {% endif %}
