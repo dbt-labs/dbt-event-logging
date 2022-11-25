@@ -1,5 +1,7 @@
 ## dbt Event Logging
 
+> ⛔🏚️ This package is obsolete and no longer developed; use [dbt_artifacts](https://hub.getdbt.com/brooklyn-data/dbt_artifacts/latest/) for a higher performance and richer view into your project.
+
 > :warning: **ADDING THIS PACKAGE TO YOUR DBT PROJECT CAN SIGNIFICANTLY SLOW
 > DOWN YOUR DBT RUNS**. This is due to the number of insert statements executed by
 > this package, especially as a post-hook. Please consider if this package is
