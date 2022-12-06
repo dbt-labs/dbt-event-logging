@@ -12,7 +12,7 @@
 
     values (
         '{{ event_name }}',
-        {{ dbt_utils.current_timestamp_in_utc() }},
+        {{ dbt.current_timestamp_in_utc_backcompat() }},
         {% if schema != None %}'{{ schema }}'{% else %}null{% endif %},
         {% if relation != None %}'{{ relation }}'{% else %}null{% endif %},
         {% if target_name != None %}'{{ target_name }}'{% else %}null{% endif %},
@@ -26,13 +26,13 @@
 {% macro bigquery__create_audit_log_table() -%}
 
     {% set required_columns = [
-       ["event_name", dbt_utils.type_string()],
-       ["event_timestamp", dbt_utils.type_timestamp()],
-       ["event_schema", dbt_utils.type_string()],
-       ["event_model", dbt_utils.type_string()],
-       ["event_target", dbt_utils.type_string()],
+       ["event_name", dbt.type_string()],
+       ["event_timestamp", dbt.type_timestamp()],
+       ["event_schema", dbt.type_string()],
+       ["event_model", dbt.type_string()],
+       ["event_target", dbt.type_string()],
        ["event_is_full_refresh", "BOOLEAN"],
-       ["invocation_id", dbt_utils.type_string()],
+       ["invocation_id", dbt.type_string()],
     ] -%}
 
     {% set audit_table = logging.get_audit_relation() -%}

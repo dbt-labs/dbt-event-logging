@@ -3,7 +3,7 @@ with
     select
       model
       , max(deployment_started_at) as last_deployment_ts
-      , datediff('hour', max(deployment_started_at), {{ dbt_utils.current_timestamp() }}) as hours_since_refreshed
+      , datediff('hour', max(deployment_started_at), {{ dbt.current_timestamp_backcompat() }}) as hours_since_refreshed
     from
       {{ ref('stg_dbt_model_deployments') }}
     group by

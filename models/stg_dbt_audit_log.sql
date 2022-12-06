@@ -10,7 +10,7 @@ with_id as (
 
         *,
 
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'event_name',
             'event_model',
             'invocation_id'
