@@ -78,7 +78,7 @@ jobs:
             # dbt --warn-error run --target snowflake --full-refresh
             # dbt --warn-error run --target snowflake
 
-            dbt --warn-error run-operation drop_audit_schema --target snowflake
+            dbt --warn-error run-operation drop_audit_schema --target snowflake || true
             dbt --warn-error run-operation create_legacy_audit_table --target snowflake
             dbt --warn-error run --target snowflake --full-refresh
             dbt --warn-error run --target snowflake
@@ -106,3 +106,13 @@ jobs:
           key: deps1-{{ .Branch }}
           paths:
             - "dbt_venv"
+
+workflows:
+  version: 2
+  test-all:
+    jobs:
+      - build:
+          context:
+            - profile-redshift
+            - profile-snowflake
+            #- profile-bigquery
