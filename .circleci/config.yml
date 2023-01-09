@@ -115,4 +115,4 @@ workflows:
           context:
             - profile-redshift
             - profile-snowflake
-            - profile-bigquery
+            #- profile-bigquery
