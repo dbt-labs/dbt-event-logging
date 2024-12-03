@@ -1,13 +1,25 @@
+# ***Archival Notice***
+This repository has been archived.
+
+As a result all of its historical issues and PRs have been closed.
+
+Please *do not clone* this repo without understanding the risk in doing so:
+- It may have unaddressed security vulnerabilities
+- It may have unaddressed bugs
+
+<details>
+   <summary>Click for historical readme</summary>
+
 ## dbt Event Logging
 
-> ⛔🏚️ This package is obsolete and no longer developed; use [dbt_artifacts](https://hub.getdbt.com/brooklyn-data/dbt_artifacts/latest/) for a higher performance and richer view into your project.
+&gt; ⛔🏚️ This package is obsolete and no longer developed; use [dbt_artifacts](https://hub.getdbt.com/brooklyn-data/dbt_artifacts/latest/) for a higher performance and richer view into your project.
 
-> :warning: **ADDING THIS PACKAGE TO YOUR DBT PROJECT CAN SIGNIFICANTLY SLOW
-> DOWN YOUR DBT RUNS**. This is due to the number of insert statements executed by
-> this package, especially as a post-hook. Please consider if this package is
-> appropriate for your use case before using it.
+&gt; :warning: **ADDING THIS PACKAGE TO YOUR DBT PROJECT CAN SIGNIFICANTLY SLOW
+&gt; DOWN YOUR DBT RUNS**. This is due to the number of insert statements executed by
+&gt; this package, especially as a post-hook. Please consider if this package is
+&gt; appropriate for your use case before using it.
 
-Requires dbt >= 0.18.0
+Requires dbt &gt;= 0.18.0
 
 This package provides out-of-the-box functionality to log events for all dbt
 invocations, including run start, run end, model start, and model end. It
@@ -27,8 +39,8 @@ convenience models to make it easier to parse the event log data.
 
 models:
   ...
-  pre-hook: "{{ logging.log_model_start_event() }}"
-  post-hook: "{{ logging.log_model_end_event() }}"
+  pre-hook: &quot;{{ logging.log_model_start_event() }}&quot;
+  post-hook: &quot;{{ logging.log_model_end_event() }}&quot;
 ```
 
 That's it! You'll now have a stream of events for all dbt invocations in your
@@ -66,14 +78,14 @@ For example to always log into a specific database, say `META`, regardless of DB
 
 ### Adapter support
 
-This package is currently compatible with dbt's BigQuery<sup>1</sup>, Snowflake, Redshift, and
+This package is currently compatible with dbt's BigQuery&lt;sup&gt;1&lt;/sup&gt;, Snowflake, Redshift, and
 Postgres integrations.
 
-<sup>1</sup> BigQuery support may only work when 1 thread is set in your `profiles.yml` file. Anything larger may result in "quota exceeded" errors.
+&lt;sup&gt;1&lt;/sup&gt; BigQuery support may only work when 1 thread is set in your `profiles.yml` file. Anything larger may result in &quot;quota exceeded&quot; errors.
 
 ### Migration guide
 
-#### v0.1.17 -> v0.2.0
+#### v0.1.17 -&gt; v0.2.0
 
 New columns were added in v0.2.0:
 
@@ -86,3 +98,4 @@ These will be added to your existing audit table automatically in the `on-run-st
 ### Contributing
 
 Additional contributions to this repo are very welcome! Check out [this](https://discourse.getdbt.com/t/contributing-to-an-external-dbt-package/657) post on the best workflow for contributing to a package. All PRs should only include functionality that is contained within all Segment deployments; no implementation-specific details should be included.
+
